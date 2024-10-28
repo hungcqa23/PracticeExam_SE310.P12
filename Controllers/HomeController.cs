@@ -18,7 +18,7 @@ namespace ecommerce_web.Controllers
             _logger = logger;
         }
 
-        // [Authentication]
+        // [Authentication] 
         public IActionResult Index(int? page)
         {
             int pageSize = 8;
@@ -28,7 +28,7 @@ namespace ecommerce_web.Controllers
             return View(lst);
         }
         [Authentication]
-        public IActionResult SanPhamTheoLoai(String maloai, int? page)
+        public IActionResult SanPhamTheoLoai(string maloai, int? page)
         {
             int pageSize = 8;
             int pageNumber = page == null || page < 0 ? 1 : page.Value;
@@ -51,6 +51,7 @@ namespace ecommerce_web.Controllers
         public IActionResult ProductDetail(string maSp)
         {
             var sanPham = db.TDanhMucSps.SingleOrDefault(x => x.MaSp == maSp);
+            if (sanPham == null) throw new Exception("Kho?ng ti?m tha??y sa?n pha??m");
             var anhSanPham = db.TAnhSps.Where(x => x.MaSp == maSp).ToList();
             var homeProductDetailViewModel = new HomeProductDetailViewModel
             {
@@ -58,11 +59,6 @@ namespace ecommerce_web.Controllers
                 anhSps = anhSanPham
             };
             return View(homeProductDetailViewModel);
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

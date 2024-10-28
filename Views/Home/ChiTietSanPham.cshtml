@@ -1,4 +1,5 @@
 ﻿@model ecommerce_web.Models.TDanhMucSp
+
 @{
     ViewData["Title"] = "ChiTietSanPham";
     Layout = "~/Views/Home/_LayoutOgani.cshtml";
@@ -11,13 +12,14 @@
                 <div class="product__details__pic">
                     <div class="product__details__pic__item">
                         <img class="product__details__pic__item--large"
-                             src=@Url.Content("../ProductImages/"+Model.AnhDaiDien) alt="">
+                             src="@Url.Content("~/ProductImages/" + Model.AnhDaiDien)" alt="">
                     </div>
                     <div class="product__details__pic__slider owl-carousel">
                         @foreach (var image in ViewBag.anhSanPham)
                         {
-                            <img data-imgbigurl=@Url.Content("../ProductImages/" + image.TenFileAnh)
-                                 src=@Url.Content("../ProductImages/"+image.TenFileAnh) alt="">
+                            <img data-imgbigurl="@Url.Content("~/ProductImages/" + image.TenFileAnh)"
+                                 src="@Url.Content("~/ProductImages/" + image.TenFileAnh)"
+                                 alt="">
                         }
                     </div>
                 </div>
@@ -85,9 +87,6 @@
                                 <p>
                                     @Model.GioiThieuSp
                                 </p>
-                                <p>
-                                    @Model.GioiThieuSp
-                                </p>
                             </div>
                         </div>
                         <div class="tab-pane" id="tabs-2" role="tabpanel">
@@ -95,8 +94,6 @@
                                 <h6>Products Infomation</h6>
                                 <p>
                                     @Model.GioiThieuSp
-                                </p>
-                                <p> @Model.GioiThieuSp
                                 </p>
                             </div>
                         </div>

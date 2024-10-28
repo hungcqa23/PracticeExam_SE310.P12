@@ -46,7 +46,6 @@ namespace ecommerce_web.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult ThemSanPhamMoi(TDanhMucSp sanPham)
         {
-
             if (ModelState.IsValid)
             {
                 db.TDanhMucSps.Add(sanPham);
@@ -102,6 +101,87 @@ namespace ecommerce_web.Areas.Admin.Controllers
             db.SaveChanges();
             TempData["Message"] = "Sản phẩm đã được xóa";
             return RedirectToAction("DanhMucSanPham", "HomeAdmin");
+        }
+
+        [Route("QuanLiNguoiDung")]
+        [HttpGet]
+        public IActionResult QuanLiNguoiDung(int? page)
+        {
+            int pageSize = 10;
+            int pageNumber = page == null || page < 0 ? 1 : page.Value;
+            var lstUser = db.TUsers.AsNoTracking().OrderBy(x => x.Username);
+            PagedList<TUser> pagedListUser = new PagedList<TUser>(lstUser, pageNumber, pageSize);
+            return View(pagedListUser);
+        }
+
+        [Route("ThemNguoiDungMoi")]
+        [HttpGet]
+        public IActionResult ThemNguoiDungMoi()
+        {
+            return View();
+        }
+
+        [Route("ThemNguoiDungMoi")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ThemNguoiDungMoi(TUser user)
+        {
+            if (ModelState.IsValid)
+            {
+                db.TUsers.Add(user);
+                db.SaveChanges();
+                return RedirectToAction("QuanLiNguoiDung");
+            }
+            return View(user);
+        }
+
+        [Route("SuaNguoiDung")]
+        [HttpGet]
+        public IActionResult SuaNguoiDung(string username)
+        {
+            var user = db.TUsers.Find(username);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            ViewBag.Username = user.Username;
+            ViewBag.LoaiUser = user.LoaiUser;
+            ViewBag.Password = user.Password;
+
+            return View(user);
+        }
+
+        [Route("SuaNguoiDung")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SuaNguoiDung(TUser user)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(user).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("QuanLi");
+            }
+            return View(user);
+        }
+
+
+        [Route("XoaNguoiDung")]
+        [HttpGet]
+        public IActionResult XoaNguoiDung(string username)
+        {
+            var user = db.TUsers.Find(username);
+            if (user != null)
+            {
+                db.TUsers.Remove(user);
+                db.SaveChanges();
+                TempData["Message"] = "Người dùng đã được xóa";
+            }
+            else
+            {
+                TempData["Message"] = "Người dùng không tồn tại";
+            }
+            return RedirectToAction("QuanLi");
         }
     }
 }
